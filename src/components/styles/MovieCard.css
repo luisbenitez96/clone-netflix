@@ -38,3 +38,9 @@
   height: 60px;
   overflow: hidden;
 }
+
+.movie-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}

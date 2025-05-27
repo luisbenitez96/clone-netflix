@@ -6,7 +6,8 @@ import {
 import {
   getPopularMovies as apiGetPopularMovies,
   searchMovies as apiSearchMovies,
-} from "../../apis/tmdbApi"; // Renombramos para evitar colisión
+  getMovieDetails as apiGetMovieDetails,
+} from "../../apis/tmdbApi";
 
 // Definimos los tipos para el estado y las películas
 interface Movie {
@@ -14,15 +15,46 @@ interface Movie {
   title: string;
   poster_path: string | null;
   overview: string;
+  backdrop_path: string | null;
+}
+
+// Interfaz para detalles de película (puede ser más completa)
+interface Genre {
+  id: number;
+  name: string;
+}
+interface ProductionCompany {
+  id: number;
+  logo_path: string | null;
+  name: string;
+  origin_country: string;
+}
+
+interface SelectedMovie extends Movie {
+  backdrop_path: any;
+  // Extiende la Movie básica
+  genres?: Genre[];
+  homepage?: string | null;
+  imdb_id?: string | null;
+  production_companies?: ProductionCompany[];
+  release_date?: string;
+  runtime?: number | null;
+  status?: string;
+  tagline?: string | null;
+  vote_average?: number;
+  vote_count?: number;
 }
 
 interface MoviesState {
   popularMovies: Movie[];
   searchResults: Movie[];
-  searchTerm: string; // Podríamos decidir si este va aquí o se queda local
+  searchTerm: string;
   currentView: "popular" | "search";
   loading: "idle" | "pending" | "succeeded" | "failed";
   error: string | null;
+  selectedMovie: SelectedMovie | null;
+  selectedMovieLoading: "idle" | "pending" | "succeeded" | "failed";
+  selectedMovieError: string | null;
 }
 
 const initialState: MoviesState = {
@@ -32,6 +64,9 @@ const initialState: MoviesState = {
   currentView: "popular",
   loading: "idle",
   error: null,
+  selectedMovie: null,
+  selectedMovieLoading: "idle",
+  selectedMovieError: null,
 };
 
 // Thunk para obtener películas populares
@@ -39,8 +74,8 @@ export const fetchPopularMovies = createAsyncThunk(
   "movies/fetchPopular",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await apiGetPopularMovies(); // Usamos la función renombrada de la API
-      return response.results; // TMDB devuelve { page, results, total_pages, total_results }
+      const response = await apiGetPopularMovies();
+      return response.results;
     } catch (err: any) {
       return rejectWithValue(err.message || "Failed to fetch popular movies");
     }
@@ -52,13 +87,12 @@ export const fetchSearchMovies = createAsyncThunk(
   "movies/fetchSearch",
   async (searchTerm: string, { rejectWithValue }) => {
     if (!searchTerm.trim()) {
-      return { results: [] as Movie[], searchTerm }; // Devolver searchTerm aquí también
+      return { results: [] as Movie[], searchTerm };
     }
     try {
-      const response = await apiSearchMovies(searchTerm); // Usamos la función renombrada de la API
+      const response = await apiSearchMovies(searchTerm);
       return { results: response.results, searchTerm };
     } catch (err: any) {
-      // Incluir searchTerm en el valor rechazado para consistencia
       return rejectWithValue({
         message:
           err.message || `Failed to search movies for query: ${searchTerm}`,
@@ -67,6 +101,22 @@ export const fetchSearchMovies = createAsyncThunk(
     }
   }
 );
+
+// Thunk para obtener detalles de una película por ID
+export const fetchMovieDetailsById = createAsyncThunk<
+  SelectedMovie, // Tipo de valor de retorno en caso de éxito
+  string, // Tipo del argumento (movieId)
+  { rejectValue: string } // Tipo del valor de rechazo
+>("movies/fetchDetailsById", async (movieId, { rejectWithValue }) => {
+  try {
+    const response = await apiGetMovieDetails(movieId);
+    return response as SelectedMovie; // Aseguramos que el tipo sea SelectedMovie
+  } catch (err: any) {
+    return rejectWithValue(
+      err.message || `Failed to fetch details for movie ID ${movieId}`
+    );
+  }
+});
 
 const moviesSlice = createSlice({
   name: "movies",
@@ -78,7 +128,7 @@ const moviesSlice = createSlice({
     setCurrentView: (state, action: PayloadAction<"popular" | "search">) => {
       state.currentView = action.payload;
       if (action.payload === "popular") {
-        state.searchResults = []; // Limpiar resultados de búsqueda al volver a populares
+        state.searchResults = [];
       }
     },
     clearSearch: (state) => {
@@ -91,7 +141,6 @@ const moviesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Casos para fetchPopularMovies
       .addCase(fetchPopularMovies.pending, (state) => {
         state.loading = "pending";
         state.error = null;
@@ -101,22 +150,16 @@ const moviesSlice = createSlice({
         (state, action: PayloadAction<Movie[]>) => {
           state.loading = "succeeded";
           state.popularMovies = action.payload;
-          state.currentView = "popular"; // Asegurar que la vista sea popular
+          state.currentView = "popular";
         }
       )
       .addCase(fetchPopularMovies.rejected, (state, action) => {
         state.loading = "failed";
         state.error = action.payload as string;
       })
-      // Casos para fetchSearchMovies
       .addCase(fetchSearchMovies.pending, (state, action) => {
-        // action aquí puede no tener searchTerm aún
         state.loading = "pending";
         state.error = null;
-        // Opcional: si quieres setear el searchTerm al iniciar la búsqueda desde el argumento del thunk
-        // if (action.meta.arg) {
-        //   state.searchTerm = action.meta.arg;
-        // }
       })
       .addCase(
         fetchSearchMovies.fulfilled,
@@ -155,7 +198,25 @@ const moviesSlice = createSlice({
             state.error = "An unknown error occurred during search";
           }
         }
-      );
+      )
+      // Casos para fetchMovieDetailsById
+      .addCase(fetchMovieDetailsById.pending, (state) => {
+        state.selectedMovieLoading = "pending";
+        state.selectedMovieError = null;
+        // state.selectedMovie = null; // Opcional: limpiar la película anterior mientras carga la nueva
+      })
+      .addCase(
+        fetchMovieDetailsById.fulfilled,
+        (state, action: PayloadAction<SelectedMovie>) => {
+          state.selectedMovieLoading = "succeeded";
+          state.selectedMovie = action.payload;
+        }
+      )
+      .addCase(fetchMovieDetailsById.rejected, (state, action) => {
+        state.selectedMovieLoading = "failed";
+        state.selectedMovieError =
+          action.payload ?? "Failed to load movie details";
+      });
   },
 });
 

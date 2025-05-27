@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./styles/MovieCard.css"; // Crearemos este archivo para los estilos
 
 interface MovieCardProps {
@@ -10,6 +11,7 @@ interface MovieCardProps {
 }
 
 const MovieCard: React.FC<MovieCardProps> = ({
+  id,
   title,
   poster_path,
   overview,
@@ -19,17 +21,19 @@ const MovieCard: React.FC<MovieCardProps> = ({
     : "https://via.placeholder.com/300x450?text=No+Image"; // Placeholder si no hay imagen
 
   return (
-    <div className="movie-card">
-      <img src={imageUrl} alt={title} className="movie-card-poster" />
-      <div className="movie-card-body">
-        <h3 className="movie-card-title">{title}</h3>
-        <p className="movie-card-overview">
-          {overview.substring(0, 100)}...
-        </p>{" "}
-        {/* Acortamos el overview */}
-        {/* Aquí podríamos añadir más detalles, como un botón de "Ver más" o la calificación */}
+    <Link to={`/movie/${id}`} className="movie-card-link">
+      <div className="movie-card">
+        <img src={imageUrl} alt={title} className="movie-card-poster" />
+        <div className="movie-card-body">
+          <h3 className="movie-card-title">{title}</h3>
+          <p className="movie-card-overview">
+            {overview.substring(0, 100)}...
+          </p>{" "}
+          {/* Acortamos el overview */}
+          {/* Aquí podríamos añadir más detalles, como un botón de "Ver más" o la calificación */}
+        </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

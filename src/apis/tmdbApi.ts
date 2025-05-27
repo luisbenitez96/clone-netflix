@@ -49,6 +49,21 @@ export const searchMovies = async (query: string, page: number = 1) => {
   }
 };
 
+export const getMovieDetails = async (movieId: string | number) => {
+  try {
+    const response = await tmdbApi.get(`/movie/${movieId}`, {
+      params: {
+        language: "en-US", // O 'es-MX', 'es-ES'
+        // Podrías añadir 'append_to_response': 'videos,credits' para obtener más datos
+      },
+    });
+    return response.data; // Esto debería ser el objeto de detalles de la película
+  } catch (error) {
+    console.error(`Error fetching details for movie ID ${movieId}:`, error);
+    throw error;
+  }
+};
+
 // Aquí puedes añadir más funciones para otros endpoints, como:
 // export const getMovieDetails = async (movieId) => { ... };
 

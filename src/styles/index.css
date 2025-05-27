@@ -12,11 +12,54 @@ body {
 
 .movies-list {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
+  flex-wrap: nowrap; /* Para que los elementos no salten de línea */
+  justify-content: flex-start; /* Alinea las tarjetas al inicio del contenedor */
+  gap: 15px; /* Espacio reducido entre tarjetas para el carousel */
   padding: 20px;
+  padding-bottom: 30px; /* Espacio extra en la parte inferior para la barra de scroll */
   background-color: #141414;
+  overflow-x: auto; /* Permite el scroll horizontal */
+  overflow-y: hidden; /* Ocultar scroll vertical si apareciera */
+  /* Opcional: para un efecto de "enganche" al hacer scroll, pero puede no ser ideal para todos los navegadores/casos */
+  /* scroll-snap-type: x mandatory; */
+}
+
+/* Ajuste para MovieCard dentro del carousel */
+.movies-list .movie-card {
+  flex-shrink: 0; /* Evita que las tarjetas se encojan para caber */
+  /* scroll-snap-align: start; */ /* Para el efecto de enganche si se usa scroll-snap-type */
+  width: 180px; /* Un ancho un poco menor para que quepan más en vista */
+}
+
+.movies-list .movie-card .movie-card-poster {
+  /* Selector más específico para la altura del poster */
+  height: 270px; /* Ajustar altura del poster si el ancho de la tarjeta cambió */
+}
+
+/* Estilos para la barra de scroll en navegadores WebKit */
+.movies-list::-webkit-scrollbar {
+  height: 12px; /* Altura de la barra de scroll horizontal */
+}
+
+.movies-list::-webkit-scrollbar-track {
+  background: #222; /* Color del riel */
+  border-radius: 10px;
+}
+
+.movies-list::-webkit-scrollbar-thumb {
+  background-color: #555; /* Color del pulgar de la barra de scroll */
+  border-radius: 10px;
+  border: 3px solid #222; /* Crea un efecto de padding alrededor del pulgar */
+}
+
+.movies-list::-webkit-scrollbar-thumb:hover {
+  background-color: #777;
+}
+
+/* Estilos para la barra de scroll en Firefox */
+.movies-list {
+  scrollbar-width: thin; /* Puede ser 'auto', 'thin', o 'none' */
+  scrollbar-color: #555 #222; /* color del pulgar y color del riel */
 }
 
 h1 {
@@ -69,4 +112,109 @@ h1 {
 
 .search-button:hover {
   background-color: #f40612; /* Un rojo un poco más brillante al pasar el mouse */
+}
+
+.clear-search-button {
+  padding: 10px;
+  margin-left: 5px;
+  background: #555;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.clear-search-button:hover {
+  background: #777;
+}
+
+.status-message {
+  color: white;
+  text-align: center;
+  width: 100%; /* Para que ocupe el ancho en el flex container de movies-list si es un <p> */
+  margin-top: 20px;
+  padding: 20px;
+  font-size: 1.1rem;
+}
+
+.error-message {
+  color: #fff; /* Texto blanco sobre fondo rojo */
+  text-align: center;
+  width: 100%; /* Para que ocupe el ancho */
+  margin: 20px auto; /* Margen superior/inferior y centrado horizontal */
+  padding: 15px;
+  font-size: 1.1rem;
+  border: 1px solid #e50914; /* Borde rojo oscuro */
+  background-color: rgba(
+    100,
+    0,
+    0,
+    0.3
+  ); /* Fondo rojo oscuro semi-transparente */
+  border-radius: 4px;
+}
+
+/* Estilos para el Hero Banner */
+.hero-banner {
+  height: 70vh; /* Altura del banner, puedes ajustarla */
+  background-size: cover;
+  background-position: center center;
+  position: relative; /* Para posicionar el contenido dentro */
+  display: flex;
+  align-items: flex-end; /* Alinea el contenido abajo */
+  padding: 20px 60px; /* Espaciado interno, más padding lateral */
+  box-sizing: border-box;
+  color: #fff;
+}
+
+.hero-banner-content {
+  background: linear-gradient(
+    to top,
+    rgba(20, 20, 20, 1) 0%,
+    rgba(20, 20, 20, 0.8) 50%,
+    rgba(20, 20, 20, 0) 100%
+  ); /* Un degradado más sutil desde abajo */
+  padding: 30px;
+  border-radius: 8px; /* Opcional, si quieres un fondo para el texto */
+  max-width: 600px; /* Ancho máximo para el texto */
+  z-index: 1; /* Para asegurar que esté sobre el fondo si hay problemas */
+}
+
+.hero-banner-title {
+  font-size: 3rem; /* Tamaño grande para el título */
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.hero-banner-overview {
+  font-size: 1.1rem;
+  margin-bottom: 25px;
+  line-height: 1.5;
+  max-height: 120px; /* Limitar altura del resumen si es muy largo */
+  overflow: hidden; /* Ocultar texto que desborde */
+}
+
+.hero-banner-button {
+  background-color: rgba(229, 9, 20, 0.9); /* Rojo Netflix semi-transparente */
+  color: #fff;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.hero-banner-button:hover {
+  background-color: #e50914; /* Rojo Netflix opaco */
+  transform: scale(1.05);
+}
+
+/* Ajuste para que el h1 de "Películas Populares" / "Resultados..." no esté pegado al banner */
+.search-form + h1 {
+  margin-top: 40px;
 }
