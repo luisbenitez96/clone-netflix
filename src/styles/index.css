@@ -1,0 +1,72 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #141414;
+  color: #fff;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.movies-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+  background-color: #141414;
+}
+
+h1 {
+  text-align: center;
+  color: #e50914;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/* Estilos para la Barra de Búsqueda */
+.search-form {
+  display: flex; /* Alinea el input y el botón en la misma línea */
+  justify-content: center; /* Centra la barra de búsqueda */
+  align-items: center; /* Alinea verticalmente los elementos */
+  padding: 20px;
+  margin-bottom: 20px; /* Espacio antes del título de la lista de películas */
+  gap: 10px; /* Espacio entre el input y el botón */
+}
+
+.search-input {
+  padding: 12px 15px;
+  font-size: 1rem;
+  color: #fff; /* Color del texto */
+  background-color: #333; /* Fondo del input */
+  border: 1px solid #555; /* Borde sutil */
+  border-radius: 4px;
+  width: 350px; /* Ancho del input */
+  outline: none; /* Quitar el borde azul al enfocar (opcional) */
+}
+
+.search-input::placeholder {
+  color: #888; /* Color del placeholder */
+}
+
+.search-input:focus {
+  border-color: #e50914; /* Borde rojo de Netflix al enfocar */
+  box-shadow: 0 0 5px rgba(229, 9, 20, 0.5); /* Sombra sutil roja */
+}
+
+.search-button {
+  padding: 12px 20px;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #e50914; /* Rojo Netflix */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.search-button:hover {
+  background-color: #f40612; /* Un rojo un poco más brillante al pasar el mouse */
+}
