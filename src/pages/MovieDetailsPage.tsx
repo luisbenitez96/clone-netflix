@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { fetchMovieDetailsById } from "../store/slices/moviesSlice"; // Importar el thunk
-// Podríamos añadir un componente de estilo para la página de detalles, ej: './MovieDetailsPage.css'
+import {
+  useAppDispatch,
+  useAppSelector,
+  fetchMovieDetailsById,
+} from "../store";
 
 const MovieDetailsPage: React.FC = () => {
   const { movieId } = useParams<{ movieId: string }>();
@@ -18,14 +20,9 @@ const MovieDetailsPage: React.FC = () => {
     if (movieId) {
       dispatch(fetchMovieDetailsById(movieId));
     }
-    // Opcional: Limpiar selectedMovie al desmontar el componente si es necesario
-    // return () => {
-    //   dispatch(clearSelectedMovie()); // Necesitaríamos una acción para esto
-    // };
   }, [dispatch, movieId]);
 
   if (!movieId) {
-    // Aunque la ruta debería garantizar movieId, es una buena comprobación
     return (
       <div style={{ padding: "20px", color: "white" }}>
         ID de película inválido.
@@ -50,9 +47,6 @@ const MovieDetailsPage: React.FC = () => {
   }
 
   if (!selectedMovie || String(selectedMovie.id) !== movieId) {
-    // Comprobación adicional por si el selectedMovie en el store no es el actual
-    // o si se navega muy rápido entre detalles.
-    // Si 'loading' es 'succeeded' y no hay 'selectedMovie', podría ser un error de ID no encontrado por la API.
     if (loading === "succeeded") {
       return (
         <div style={{ padding: "20px", color: "white", textAlign: "center" }}>
@@ -72,7 +66,6 @@ const MovieDetailsPage: React.FC = () => {
     : "https://via.placeholder.com/500x750?text=No+Poster";
 
   return (
-    // Considerar un div contenedor con un fondo de backdrop si existe
     <div
       className="movie-details-container"
       style={{
@@ -170,8 +163,6 @@ const MovieDetailsPage: React.FC = () => {
               </a>
             </p>
           )}
-
-          {/* Podrías añadir más información como productoras, etc. */}
         </div>
       </div>
     </div>

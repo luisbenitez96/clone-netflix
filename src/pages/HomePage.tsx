@@ -1,16 +1,16 @@
-import React, { useEffect } from "react"; // Asegúrate de que React esté importado si no lo estaba
-import { Link } from "react-router-dom"; // Importar Link
-import MovieCard from "../components/MovieCard"; // Ajusta la ruta si es necesario
-import { useAppDispatch, useAppSelector } from "../store/hooks";
+import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
+import MovieCard from "../components/MovieCard";
 import {
+  useAppDispatch,
+  useAppSelector,
   fetchPopularMovies,
   fetchSearchMovies,
-  setSearchTerm,
   clearSearch,
-} from "../store/slices/moviesSlice";
+  setSearchTerm,
+} from "../store";
 
 const HomePage: React.FC = () => {
-  // Añadir React.FC para tipar el componente funcional
   const dispatch = useAppDispatch();
   const {
     popularMovies,

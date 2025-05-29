@@ -1,12 +1,17 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import { Provider } from "react-redux";
-import { BrowserRouter } from "react-router-dom";
-import { store } from "./store/store";
+import React, { StrictMode } from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.tsx";
 import "./styles/index.css";
-import App from "./App";
+import { Provider } from "react-redux";
+import { store } from "./store/store.ts";
+import { BrowserRouter } from "react-router-dom";
 
-createRoot(document.getElementById("root")!).render(
+// Log para depurar variables de entorno directamente en main.tsx
+console.log("VITE_BASE_URL en main.tsx:", import.meta.env.VITE_BASE_URL);
+console.log("VITE_API_KEY en main.tsx:", import.meta.env.VITE_API_KEY);
+console.log("Todas las variables de entorno en main.tsx:", import.meta.env);
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
       <BrowserRouter>

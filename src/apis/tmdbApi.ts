@@ -1,19 +1,33 @@
 import axios from "axios";
+import { getEnvVariables } from "../helpers/getEnvVariables";
 
-const API_KEY =
-  "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhNzQ4YWU1OTliOTVjYmE1MDIwMTk4NDk3YjViZWFlNSIsIm5iZiI6MTc0ODM2NjA5Ny40MDcsInN1YiI6IjY4MzVmMzExM2ZhZDA0ZGNhNmE4NzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.hq8VT0JWRMJkUXxvmJ7YqtGOKZWebCh-3VjkQK7Y7TQ";
-const BASE_URL = "https://api.themoviedb.org/3";
+// Log para depuración de import.meta.env
+console.log("Contenido de import.meta.env en tmdbApi:", import.meta.env);
+
+const { VITE_BASE_URL, VITE_API_KEY } = getEnvVariables();
+
+// Log para depuración
+console.log("VITE_BASE_URL desde tmdbApi:", VITE_BASE_URL);
+console.log("VITE_API_KEY desde tmdbApi:", VITE_API_KEY);
 
 const tmdbApi = axios.create({
-  baseURL: BASE_URL,
+  baseURL: VITE_BASE_URL,
   headers: {
     accept: "application/json",
-    Authorization: `Bearer ${API_KEY}`,
+    Authorization: `Bearer ${VITE_API_KEY}`,
   },
 });
 
 // Ejemplo de función para obtener películas populares
 export const getPopularMovies = async (page: number = 1) => {
+  // Log para depuración de la URL completa
+  console.log(
+    "Solicitando a:",
+    tmdbApi.getUri({
+      url: "/movie/popular",
+      params: { language: "en-US", page: page },
+    })
+  );
   try {
     const response = await tmdbApi.get("/movie/popular", {
       params: {

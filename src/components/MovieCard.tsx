@@ -1,13 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./styles/MovieCard.css"; // Crearemos este archivo para los estilos
+import "./styles/MovieCard.css";
 
 interface MovieCardProps {
   id: number;
   title: string;
-  poster_path: string | null; // poster_path puede ser null
+  poster_path: string | null;
   overview: string;
-  // Podríamos añadir más props como vote_average, release_date, etc.
 }
 
 const MovieCard: React.FC<MovieCardProps> = ({
@@ -17,9 +16,8 @@ const MovieCard: React.FC<MovieCardProps> = ({
   overview,
 }) => {
   const imageUrl = poster_path
-    ? `https://image.tmdb.org/t/p/w300${poster_path}` // Usamos w300 para un tamaño decente de póster
-    : "https://via.placeholder.com/300x450?text=No+Image"; // Placeholder si no hay imagen
-
+    ? `https://image.tmdb.org/t/p/w300${poster_path}`
+    : "https://via.placeholder.com/300x450?text=No+Image";
   return (
     <Link to={`/movie/${id}`} className="movie-card-link">
       <div className="movie-card">
@@ -29,8 +27,6 @@ const MovieCard: React.FC<MovieCardProps> = ({
           <p className="movie-card-overview">
             {overview.substring(0, 100)}...
           </p>{" "}
-          {/* Acortamos el overview */}
-          {/* Aquí podríamos añadir más detalles, como un botón de "Ver más" o la calificación */}
         </div>
       </div>
     </Link>
