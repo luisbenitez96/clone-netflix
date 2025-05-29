@@ -1,14 +1,13 @@
 import axios from "axios";
+import { getEnvVariables } from "../helpers/getEnvVariable";
 
-const API_KEY =
-  "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhNzQ4YWU1OTliOTVjYmE1MDIwMTk4NDk3YjViZWFlNSIsIm5iZiI6MTc0ODM2NjA5Ny40MDcsInN1YiI6IjY4MzVmMzExM2ZhZDA0ZGNhNmE4NzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.hq8VT0JWRMJkUXxvmJ7YqtGOKZWebCh-3VjkQK7Y7TQ";
-const BASE_URL = "https://api.themoviedb.org/3";
+const { VITE_BASE_URL, VITE_API_KEY } = getEnvVariables();
 
 const tmdbApi = axios.create({
-  baseURL: BASE_URL,
+  baseURL: VITE_BASE_URL,
   headers: {
     accept: "application/json",
-    Authorization: `Bearer ${API_KEY}`,
+    Authorization: `Bearer ${VITE_API_KEY}`,
   },
 });
 
