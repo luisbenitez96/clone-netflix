@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"; // Asegúrate de que React esté importado si no lo estaba
+import React, { useEffect, useState } from "react"; // Asegúrate de que React esté importado si no lo estaba
 import { Link } from "react-router-dom"; // Importar Link
 import MovieCard from "../components/MovieCard"; // Ajusta la ruta si es necesario
 import { useAppDispatch, useAppSelector } from "../store/hooks";
@@ -21,7 +21,22 @@ const HomePage: React.FC = () => {
     error,
   } = useAppSelector((state) => state.movies);
 
-  const heroMovie = popularMovies.length > 0 ? popularMovies[0] : null; // Película para el banner
+  const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
+
+  const heroMovie =
+    popularMovies.length > 0 ? popularMovies[currentHeroIndex] : null;
+
+  useEffect(() => {
+    if (popularMovies.length > 1) {
+      const timer = setInterval(() => {
+        setCurrentHeroIndex((prevIndex) =>
+          prevIndex === popularMovies.length - 1 ? 0 : prevIndex + 1
+        );
+      }, 5000); // Cambia cada 5 segundos
+
+      return () => clearInterval(timer); // Limpia el intervalo al desmontar o si popularMovies cambia
+    }
+  }, [popularMovies]);
 
   useEffect(() => {
     if (

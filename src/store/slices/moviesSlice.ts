@@ -157,7 +157,7 @@ const moviesSlice = createSlice({
         state.loading = "failed";
         state.error = action.payload as string;
       })
-      .addCase(fetchSearchMovies.pending, (state, action) => {
+      .addCase(fetchSearchMovies.pending, (state) => {
         state.loading = "pending";
         state.error = null;
       })
