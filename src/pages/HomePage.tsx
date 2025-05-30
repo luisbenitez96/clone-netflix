@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import MovieCard from "../components/MovieCard";
 import {
@@ -21,7 +21,21 @@ const HomePage: React.FC = () => {
     error,
   } = useAppSelector((state) => state.movies);
 
-  const heroMovie = popularMovies.length > 0 ? popularMovies[0] : null; // Película para el banner
+  const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
+
+  const heroMovie =
+    popularMovies.length > 0 ? popularMovies[currentHeroIndex] : null;
+
+  useEffect(() => {
+    if (popularMovies.length > 1) {
+      const timer = setInterval(() => {
+        setCurrentHeroIndex((prevIndex) =>
+          prevIndex === popularMovies.length - 1 ? 0 : prevIndex + 1
+        );
+      }, 5000);
+      return () => clearInterval(timer);
+    }
+  }, [popularMovies]);
 
   useEffect(() => {
     if (
@@ -53,7 +67,6 @@ const HomePage: React.FC = () => {
     else listTitle = `No hay resultados para "${searchTerm}"`;
   }
 
-  // Mensajes de carga y error específicos para HomePage
   if (
     loading === "pending" &&
     moviesToDisplay.length === 0 &&

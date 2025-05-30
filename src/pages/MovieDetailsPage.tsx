@@ -24,7 +24,7 @@ const MovieDetailsPage: React.FC = () => {
 
   if (!movieId) {
     return (
-      <div style={{ padding: "20px", color: "white" }}>
+      <div className="status-message status-message-error">
         ID de película inválido.
       </div>
     );
@@ -32,29 +32,25 @@ const MovieDetailsPage: React.FC = () => {
 
   if (loading === "pending") {
     return (
-      <div style={{ padding: "20px", color: "white", textAlign: "center" }}>
-        Cargando detalles de la película...
-      </div>
+      <div className="status-message">Cargando detalles de la película...</div>
     );
   }
 
   if (error) {
     return (
-      <div style={{ padding: "20px", color: "white", textAlign: "center" }}>
-        Error: {error}
-      </div>
+      <div className="status-message status-message-error">Error: {error}</div>
     );
   }
 
   if (!selectedMovie || String(selectedMovie.id) !== movieId) {
     if (loading === "succeeded") {
       return (
-        <div style={{ padding: "20px", color: "white", textAlign: "center" }}>
+        <div className="status-message">
           No se encontraron detalles para esta película.
         </div>
       );
     }
-    return null; // O un loader si se espera que selectedMovie se actualice
+    return null;
   }
 
   const posterBaseUrl = "https://image.tmdb.org/t/p/";
@@ -69,74 +65,40 @@ const MovieDetailsPage: React.FC = () => {
     <div
       className="movie-details-container"
       style={{
-        color: "white",
-        padding: "20px",
         backgroundImage: backdropUrl
           ? `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url(${backdropUrl})`
           : "",
-        backgroundSize: "cover",
-        backgroundPosition: "center top",
-        minHeight: "100vh",
       }}>
-      <Link
-        to="/"
-        className="back-link"
-        style={{
-          color: "#e50914",
-          textDecoration: "none",
-          marginBottom: "20px",
-          display: "inline-block",
-          fontSize: "1.2rem",
-          background: "rgba(0,0,0,0.5)",
-          padding: "5px 10px",
-          borderRadius: "4px",
-        }}>
+      <Link to="/" className="back-link">
         &larr; Volver
       </Link>
 
-      <div
-        className="movie-details-content"
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          gap: "30px",
-          background: "rgba(0,0,0,0.7)",
-          padding: "20px",
-          borderRadius: "8px",
-        }}>
+      <div className="movie-details-content">
         <div className="movie-details-poster">
           <img
             src={posterUrl}
             alt={selectedMovie.title}
-            style={{ width: "300px", borderRadius: "8px" }}
+            className="movie-details-poster-img"
           />
         </div>
-        <div className="movie-details-info" style={{ flex: 1 }}>
+        <div className="movie-details-info">
           <h1>{selectedMovie.title}</h1>
           {selectedMovie.tagline && (
-            <p
-              className="tagline"
-              style={{
-                fontStyle: "italic",
-                color: "#ccc",
-                marginBottom: "20px",
-              }}>
-              "{selectedMovie.tagline}"
-            </p>
+            <p className="tagline">"{selectedMovie.tagline}"</p>
           )}
 
           <h3>Resumen</h3>
           <p>{selectedMovie.overview}</p>
 
           {selectedMovie.genres && selectedMovie.genres.length > 0 && (
-            <div style={{ marginTop: "20px" }}>
+            <div className="movie-details-genres">
               <strong>Géneros:</strong>{" "}
               {selectedMovie.genres.map((g) => g.name).join(", ")}
             </div>
           )}
 
           {selectedMovie.release_date && (
-            <p style={{ marginTop: "10px" }}>
+            <p className="movie-details-release">
               <strong>Fecha de Estreno:</strong> {selectedMovie.release_date}
             </p>
           )}
@@ -158,7 +120,7 @@ const MovieDetailsPage: React.FC = () => {
                 href={selectedMovie.homepage}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ color: "#e50914" }}>
+                className="movie-details-homepage-link">
                 Página Oficial
               </a>
             </p>
