@@ -31,7 +31,7 @@ const HomePage: React.FC = () => {
       const timer = setInterval(() => {
         setCurrentHeroIndex((prevIndex) =>
           prevIndex === popularMovies.length - 1 ? 0 : prevIndex + 1
-        );
+        ); // la funcion de setCurrentHeroIndex es la que actualiza el estado de currentHeroIndex, donde el prevIndex es el indice actual y el popularMovies.length - 1 es el ultimo indice de la lista de peliculas populares, se pone una condicion para que si el prevIndex es el ultimo indice, se vuelva a 0, sino se incrementa en 1, setInterval es una funcion que se ejecuta cada 5 segundos, y se limpia al desmontar o si popularMovies cambia
       }, 5000); // Cambia cada 5 segundos
 
       return () => clearInterval(timer); // Limpia el intervalo al desmontar o si popularMovies cambia
