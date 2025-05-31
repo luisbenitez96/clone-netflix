@@ -1,0 +1,37 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main # O la rama que uses como principal, ej: master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20" # Especifica tu versión de Node.js preferida
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+        env:
+          VITE_API_KEY: ${{ secrets.VITE_API_KEY }}
+          VITE_BASE_URL: ${{ secrets.VITE_BASE_URL }}
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          # Si tu base en vite.config.ts es, por ejemplo, /REPO_NAME/,
+          # y quieres que se despliegue en la raíz de la rama gh-pages,
+          # puedes necesitar configurar `cname` o asegurarte que publish_dir sea correcto.
+          # Para la mayoría de los casos con `base: /REPO_NAME/`, lo siguiente es suficiente.
