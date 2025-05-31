@@ -5,4 +5,5 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   base: "/clone-netflix/", // Asegúrate que 'clone-netflix' sea el nombre de tu repo
+  // Comentario para forzar recompilación
 });

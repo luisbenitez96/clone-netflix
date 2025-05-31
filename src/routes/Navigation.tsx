@@ -6,9 +6,8 @@ export const Navigation = () => {
   return (
     <>
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/clone-netflix/" element={<HomePage />} />
         <Route path="/movie/:movieId" element={<MovieDetailsPage />} />
-        {/* <Route path="*" element={<NotFoundPage />} /> */}
       </Routes>
     </>
   );
