@@ -24,15 +24,13 @@ const MovieDetailsPage: React.FC = () => {
 
   if (!movieId) {
     return (
-      <div className="status-message status-message-error">
-        ID de película inválido.
-      </div>
+      <div className="status-message status-message-error">ID invalid.</div>
     );
   }
 
   if (loading === "pending") {
     return (
-      <div className="status-message">Cargando detalles de la película...</div>
+      <div className="status-message">Loading detail for this movie...</div>
     );
   }
 
@@ -45,9 +43,7 @@ const MovieDetailsPage: React.FC = () => {
   if (!selectedMovie || String(selectedMovie.id) !== movieId) {
     if (loading === "succeeded") {
       return (
-        <div className="status-message">
-          No se encontraron detalles para esta película.
-        </div>
+        <div className="status-message">No details found for this movie.</div>
       );
     }
     return null;
@@ -70,7 +66,7 @@ const MovieDetailsPage: React.FC = () => {
           : "",
       }}>
       <Link to="/" className="back-link">
-        &larr; Volver
+        &larr; Back
       </Link>
 
       <div className="movie-details-content">
@@ -87,31 +83,30 @@ const MovieDetailsPage: React.FC = () => {
             <p className="tagline">"{selectedMovie.tagline}"</p>
           )}
 
-          <h3>Resumen</h3>
+          <h3>Summary</h3>
           <p>{selectedMovie.overview}</p>
 
           {selectedMovie.genres && selectedMovie.genres.length > 0 && (
             <div className="movie-details-genres">
-              <strong>Géneros:</strong>{" "}
+              <strong>Genres:</strong>{" "}
               {selectedMovie.genres.map((g) => g.name).join(", ")}
             </div>
           )}
 
           {selectedMovie.release_date && (
             <p className="movie-details-release">
-              <strong>Fecha de Estreno:</strong> {selectedMovie.release_date}
+              <strong>Release Date:</strong> {selectedMovie.release_date}
             </p>
           )}
           {selectedMovie.runtime && (
             <p>
-              <strong>Duración:</strong> {selectedMovie.runtime} minutos
+              <strong>Duration:</strong> {selectedMovie.runtime} minutes
             </p>
           )}
           {selectedMovie.vote_average && (
             <p>
-              <strong>Calificación:</strong>{" "}
-              {selectedMovie.vote_average.toFixed(1)}/10 (
-              {selectedMovie.vote_count} votos)
+              <strong>Rating:</strong> {selectedMovie.vote_average.toFixed(1)}
+              /10 ({selectedMovie.vote_count} votes)
             </p>
           )}
           {selectedMovie.homepage && (
@@ -121,7 +116,7 @@ const MovieDetailsPage: React.FC = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="movie-details-homepage-link">
-                Página Oficial
+                Official Page
               </a>
             </p>
           )}

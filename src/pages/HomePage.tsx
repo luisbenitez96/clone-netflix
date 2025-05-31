@@ -59,12 +59,12 @@ const HomePage: React.FC = () => {
 
   const moviesToDisplay =
     currentView === "search" ? searchResults : popularMovies;
-  let listTitle = "Películas Populares";
+  let listTitle = "Popular Movies";
   if (currentView === "search") {
-    if (loading === "pending") listTitle = `Buscando "${searchTerm}"...`;
+    if (loading === "pending") listTitle = `Searching "${searchTerm}"...`;
     else if (searchResults.length > 0)
-      listTitle = `Resultados para "${searchTerm}"`;
-    else listTitle = `No hay resultados para "${searchTerm}"`;
+      listTitle = `Results for "${searchTerm}"`;
+    else listTitle = `No results for "${searchTerm}"`;
   }
 
   if (
@@ -72,9 +72,7 @@ const HomePage: React.FC = () => {
     moviesToDisplay.length === 0 &&
     currentView === "popular"
   ) {
-    return (
-      <div className="status-message">Cargando películas populares...</div>
-    );
+    return <div className="status-message">Loading popular movies...</div>;
   }
 
   return (
@@ -97,7 +95,7 @@ const HomePage: React.FC = () => {
               {heroMovie.overview.substring(0, 200)}...
             </p>
             <Link to={`/movie/${heroMovie.id}`} className="hero-banner-button">
-              Más Información
+              More Information
             </Link>
           </div>
         </div>
@@ -106,7 +104,7 @@ const HomePage: React.FC = () => {
       <form onSubmit={handleSearchSubmit} className="search-form">
         <input
           type="text"
-          placeholder="Buscar películas..."
+          placeholder="Search movies..."
           value={searchTerm}
           onChange={handleSearchInputChange}
           className="search-input"
@@ -116,7 +114,7 @@ const HomePage: React.FC = () => {
             type="button"
             onClick={() => dispatch(clearSearch())}
             className="clear-search-button">
-            Limpiar
+            Clear
           </button>
         )}
         <button
@@ -124,14 +122,14 @@ const HomePage: React.FC = () => {
           className="search-button"
           disabled={loading === "pending" && currentView === "search"}>
           {loading === "pending" && currentView === "search"
-            ? "Buscando..."
-            : "Buscar"}
+            ? "Searching..."
+            : "Search"}
         </button>
       </form>
       <h1>{listTitle}</h1>
       <div className="movies-list">
         {loading === "pending" && currentView === "search" && (
-          <p className="status-message">Buscando "{searchTerm}"...</p>
+          <p className="status-message">Searching "{searchTerm}"...</p>
         )}
 
         {/* Mostrar error específico de la lista si aplica, y no hay nada que mostrar */}
@@ -140,7 +138,7 @@ const HomePage: React.FC = () => {
           popularMovies.length === 0 &&
           loading !== "pending" && (
             <p className="error-message">
-              Error al cargar películas populares: {error}
+              Error in the popular movies: {error}
             </p>
           )}
         {error &&
@@ -148,15 +146,15 @@ const HomePage: React.FC = () => {
           searchResults.length === 0 &&
           loading !== "pending" && (
             <p className="error-message">
-              Error en la búsqueda de "{searchTerm}": {error}
+              Error in the search for "{searchTerm}": {error}
             </p>
           )}
 
         {moviesToDisplay.length === 0 && loading !== "pending" && !error && (
           <p className="status-message">
             {currentView === "search"
-              ? `No se encontraron películas para "${searchTerm}".`
-              : "No hay películas populares disponibles."}
+              ? `No results for "${searchTerm}".`
+              : "No popular movies available."}
           </p>
         )}
         {moviesToDisplay.map((movie) => (
