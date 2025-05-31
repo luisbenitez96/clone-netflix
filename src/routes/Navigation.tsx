@@ -6,7 +6,7 @@ export const Navigation = () => {
   return (
     <>
       <Routes>
-        <Route path="/clone-netflix/" element={<HomePage />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/movie/:movieId" element={<MovieDetailsPage />} />
       </Routes>
     </>

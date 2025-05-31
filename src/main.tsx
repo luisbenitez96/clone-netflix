@@ -7,6 +7,7 @@ import { store } from "./store/store.ts";
 import { BrowserRouter } from "react-router-dom";
 
 const baseName = import.meta.env.BASE_URL || "/";
+console.log("Using basename:", baseName);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <StrictMode>
