@@ -6,10 +6,12 @@ import { Provider } from "react-redux";
 import { store } from "./store/store.ts";
 import { BrowserRouter } from "react-router-dom";
 
+const baseName = import.meta.env.BASE_URL || "/";
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
+      <BrowserRouter basename={baseName}>
         <App />
       </BrowserRouter>
     </Provider>
