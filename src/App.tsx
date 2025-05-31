@@ -1,14 +1,10 @@
-import { Routes, Route } from "react-router-dom";
-import HomePage from "./pages/HomePage"; // Asegúrate que esta ruta sea correcta
-import MovieDetailsPage from "./pages/MovieDetailsPage";
+import { Navigation } from "./routes/Navigation";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/movie/:movieId" element={<MovieDetailsPage />} />
-      {/* <Route path="*" element={<NotFoundPage />} /> */}
-    </Routes>
+    <>
+      <Navigation />
+    </>
   );
 }
 

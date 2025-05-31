@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getEnvVariables } from "../helpers/getEnvVariable";
+import { getEnvVariables } from "../helpers/getEnvVariables";
 
 const { VITE_BASE_URL, VITE_API_KEY } = getEnvVariables();
 
@@ -11,34 +11,37 @@ const tmdbApi = axios.create({
   },
 });
 
-// Ejemplo de función para obtener películas populares
 export const getPopularMovies = async (page: number = 1) => {
+  tmdbApi.getUri({
+    url: "/movie/popular",
+    params: { language: "en-US", page: page },
+  });
+
   try {
     const response = await tmdbApi.get("/movie/popular", {
       params: {
-        language: "en-US", // Puedes cambiarlo a 'es-MX' o 'es-ES' para español
+        language: "en-US",
         page: page,
       },
     });
     return response.data;
   } catch (error) {
     console.error("Error fetching popular movies:", error);
-    throw error; // O manejar el error como prefieras
+    throw error;
   }
 };
 
 export const searchMovies = async (query: string, page: number = 1) => {
   if (!query.trim()) {
-    // Evitar búsquedas vacías
     return { results: [], page: 1, total_pages: 0, total_results: 0 };
   }
   try {
     const response = await tmdbApi.get("/search/movie", {
       params: {
         query: query,
-        language: "en-US", // O 'es-MX', 'es-ES'
+        language: "en-US",
         page: page,
-        include_adult: false, // Opcional: para excluir contenido para adultos
+        include_adult: false,
       },
     });
     return response.data;
@@ -52,18 +55,14 @@ export const getMovieDetails = async (movieId: string | number) => {
   try {
     const response = await tmdbApi.get(`/movie/${movieId}`, {
       params: {
-        language: "en-US", // O 'es-MX', 'es-ES'
-        // Podrías añadir 'append_to_response': 'videos,credits' para obtener más datos
+        language: "en-US",
       },
     });
-    return response.data; // Esto debería ser el objeto de detalles de la película
+    return response.data;
   } catch (error) {
     console.error(`Error fetching details for movie ID ${movieId}:`, error);
     throw error;
   }
 };
-
-// Aquí puedes añadir más funciones para otros endpoints, como:
-// export const getMovieDetails = async (movieId) => { ... };
 
 export default tmdbApi;

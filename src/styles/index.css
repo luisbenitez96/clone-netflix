@@ -218,3 +218,135 @@ h1 {
 .search-form + h1 {
   margin-top: 40px;
 }
+
+/* MovieDetailsPage Styles */
+.movie-details-container {
+  color: white;
+  padding: 20px;
+  background-size: cover;
+  background-position: center top;
+  min-height: 100vh;
+  /* El backgroundImage se sigue aplicando en línea debido a su naturaleza dinámica */
+}
+
+.back-link {
+  color: #e50914;
+  text-decoration: none;
+  margin-bottom: 20px;
+  display: inline-block;
+  font-size: 1.2rem;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.back-link:hover {
+  background-color: rgba(229, 9, 20, 0.8);
+  color: white;
+}
+
+.movie-details-content {
+  display: flex;
+  flex-direction: column; /* Cambiado para mejor responsividad inicial */
+  gap: 20px; /* Ajustado para móvil */
+  background: rgba(0, 0, 0, 0.75); /* Ligeramente más opaco */
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.movie-details-poster-img {
+  width: 100%; /* Ajustado para responsividad */
+  max-width: 300px; /* Máximo en pantallas grandes */
+  border-radius: 8px;
+  display: block;
+  margin: 0 auto; /* Centrar poster en móvil */
+}
+
+.movie-details-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.movie-details-info h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.tagline {
+  font-style: italic;
+  color: #ccc;
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+}
+
+.movie-details-info h3 {
+  font-size: 1.5rem;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #444;
+  padding-bottom: 5px;
+}
+
+.movie-details-info p,
+.movie-details-genres,
+.movie-details-release {
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+.movie-details-genres strong,
+.movie-details-release strong {
+  color: #aaa;
+}
+
+.movie-details-genres {
+  margin-top: 20px;
+}
+
+.movie-details-release {
+  margin-top: 10px;
+}
+
+.movie-details-homepage-link {
+  color: #e50914;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.movie-details-homepage-link:hover {
+  text-decoration: underline;
+}
+
+/* Status messages (pueden ser reutilizados) */
+.status-message {
+  padding: 40px 20px;
+  color: white;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.status-message-error {
+  color: #e50914; /* Color rojo de Netflix para errores */
+  background-color: rgba(20, 20, 20, 0.8);
+  border-radius: 4px;
+}
+
+/* Media query para pantallas más grandes */
+@media (min-width: 768px) {
+  .movie-details-content {
+    flex-direction: row; /* Volver a row en pantallas grandes */
+    gap: 30px;
+  }
+
+  .movie-details-poster-img {
+    width: 300px; /* Tamaño fijo en pantallas grandes */
+    margin: 0; /* Quitar centrado */
+  }
+
+  .movie-details-info h1 {
+    font-size: 3rem;
+  }
+}

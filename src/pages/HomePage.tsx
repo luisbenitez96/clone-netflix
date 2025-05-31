@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from "react"; // Asegúrate de que React esté importado si no lo estaba
+import React, { useEffect } from "react"; // Asegúrate de que React esté importado si no lo estaba
 import { Link } from "react-router-dom"; // Importar Link
 import MovieCard from "../components/MovieCard"; // Ajusta la ruta si es necesario
-import { useAppDispatch, useAppSelector } from "../store/hooks";
+
 import {
+  useAppDispatch,
+  useAppSelector,
   fetchPopularMovies,
   fetchSearchMovies,
-  setSearchTerm,
   clearSearch,
-} from "../store/slices/moviesSlice";
+  setSearchTerm,
+} from "../store";
 
 const HomePage: React.FC = () => {
-  // Añadir React.FC para tipar el componente funcional
   const dispatch = useAppDispatch();
   const {
     popularMovies,
@@ -21,22 +22,7 @@ const HomePage: React.FC = () => {
     error,
   } = useAppSelector((state) => state.movies);
 
-  const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
-
-  const heroMovie =
-    popularMovies.length > 0 ? popularMovies[currentHeroIndex] : null;
-
-  useEffect(() => {
-    if (popularMovies.length > 1) {
-      const timer = setInterval(() => {
-        setCurrentHeroIndex((prevIndex) =>
-          prevIndex === popularMovies.length - 1 ? 0 : prevIndex + 1
-        ); // la funcion de setCurrentHeroIndex es la que actualiza el estado de currentHeroIndex, donde el prevIndex es el indice actual y el popularMovies.length - 1 es el ultimo indice de la lista de peliculas populares, se pone una condicion para que si el prevIndex es el ultimo indice, se vuelva a 0, sino se incrementa en 1, setInterval es una funcion que se ejecuta cada 5 segundos, y se limpia al desmontar o si popularMovies cambia
-      }, 5000); // Cambia cada 5 segundos
-
-      return () => clearInterval(timer); // Limpia el intervalo al desmontar o si popularMovies cambia
-    }
-  }, [popularMovies]);
+  const heroMovie = popularMovies.length > 0 ? popularMovies[0] : null; // Película para el banner
 
   useEffect(() => {
     if (
@@ -60,23 +46,20 @@ const HomePage: React.FC = () => {
 
   const moviesToDisplay =
     currentView === "search" ? searchResults : popularMovies;
-  let listTitle = "Películas Populares";
+  let listTitle = "Popular Movies";
   if (currentView === "search") {
-    if (loading === "pending") listTitle = `Buscando "${searchTerm}"...`;
+    if (loading === "pending") listTitle = `Searching "${searchTerm}"...`;
     else if (searchResults.length > 0)
-      listTitle = `Resultados para "${searchTerm}"`;
-    else listTitle = `No hay resultados para "${searchTerm}"`;
+      listTitle = `Results for "${searchTerm}"`;
+    else listTitle = `No results for "${searchTerm}"`;
   }
 
-  // Mensajes de carga y error específicos para HomePage
   if (
     loading === "pending" &&
     moviesToDisplay.length === 0 &&
     currentView === "popular"
   ) {
-    return (
-      <div className="status-message">Cargando películas populares...</div>
-    );
+    return <div className="status-message">Loading popular movies...</div>;
   }
 
   return (
@@ -99,7 +82,7 @@ const HomePage: React.FC = () => {
               {heroMovie.overview.substring(0, 200)}...
             </p>
             <Link to={`/movie/${heroMovie.id}`} className="hero-banner-button">
-              Más Información
+              More Information
             </Link>
           </div>
         </div>
@@ -108,7 +91,7 @@ const HomePage: React.FC = () => {
       <form onSubmit={handleSearchSubmit} className="search-form">
         <input
           type="text"
-          placeholder="Buscar películas..."
+          placeholder="Search movies..."
           value={searchTerm}
           onChange={handleSearchInputChange}
           className="search-input"
@@ -118,7 +101,7 @@ const HomePage: React.FC = () => {
             type="button"
             onClick={() => dispatch(clearSearch())}
             className="clear-search-button">
-            Limpiar
+            Clear
           </button>
         )}
         <button
@@ -126,14 +109,14 @@ const HomePage: React.FC = () => {
           className="search-button"
           disabled={loading === "pending" && currentView === "search"}>
           {loading === "pending" && currentView === "search"
-            ? "Buscando..."
-            : "Buscar"}
+            ? "Searching..."
+            : "Search"}
         </button>
       </form>
       <h1>{listTitle}</h1>
       <div className="movies-list">
         {loading === "pending" && currentView === "search" && (
-          <p className="status-message">Buscando "{searchTerm}"...</p>
+          <p className="status-message">Searching "{searchTerm}"...</p>
         )}
 
         {/* Mostrar error específico de la lista si aplica, y no hay nada que mostrar */}
@@ -142,7 +125,7 @@ const HomePage: React.FC = () => {
           popularMovies.length === 0 &&
           loading !== "pending" && (
             <p className="error-message">
-              Error al cargar películas populares: {error}
+              Error in the popular movies: {error}
             </p>
           )}
         {error &&
@@ -150,15 +133,15 @@ const HomePage: React.FC = () => {
           searchResults.length === 0 &&
           loading !== "pending" && (
             <p className="error-message">
-              Error en la búsqueda de "{searchTerm}": {error}
+              Error in the search for "{searchTerm}": {error}
             </p>
           )}
 
         {moviesToDisplay.length === 0 && loading !== "pending" && !error && (
           <p className="status-message">
             {currentView === "search"
-              ? `No se encontraron películas para "${searchTerm}".`
-              : "No hay películas populares disponibles."}
+              ? `No results for "${searchTerm}".`
+              : "No popular movies available."}
           </p>
         )}
         {moviesToDisplay.map((movie) => (
